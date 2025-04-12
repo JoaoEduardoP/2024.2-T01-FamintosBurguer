@@ -11,10 +11,10 @@ export async function Express(): Promise<void> {
   if (process.env.NODE_ENV === 'development') {
     const server = express()
 
-    console.log('Iniciando servidor de testes...')
+    console.log('--------------------------------------- \n Iniciando servidor de testes...')
 
     server.use((req, _, next) => {
-      console.log(`Requisicao: ${req.method} ${req.url}`)
+      console.log(` Requisicao do Servidor Express: ${req.method} ${req.url} \n ---------------------------------------`)
       next()
     })
 
@@ -29,7 +29,7 @@ export async function Express(): Promise<void> {
     //server.use('/ingredientes', ingredientes)
 
     server.listen(porta, () => {
-      console.log(`Servidor de testes rodando no endereco: http://localhost:${porta}`)
+      console.log(`--------------------------------------- \n Servidor de testes rodando no endereco: http://localhost:${porta}`)
     })
   }
 }

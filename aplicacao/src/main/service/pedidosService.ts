@@ -1,8 +1,6 @@
 import { AppDataSource } from '../config/database'
 import { Pedido } from '../entity/pedido'
 import { Between, Repository } from 'typeorm'
-import { IPedido } from '../interface/IPedido'
-import { ItensPedido } from '../entity/itenspedido'
 
 export default class PedidosService {
   private repository: Repository<Pedido>
@@ -11,30 +9,21 @@ export default class PedidosService {
     this.repository = AppDataSource.getRepository(Pedido)
   }
 
-  async postPedido(pedido: IPedido): Promise<Pedido> {
+  async postPedido(pedido: Pedido): Promise<Pedido> {
     try {
-      const itemRepo = AppDataSource.getRepository(ItensPedido)
       const dadosPedido = new Pedido()
 
       dadosPedido.cliente = pedido.cliente
       dadosPedido.data = new Date(pedido.data)
+      dadosPedido.desconto = pedido.desconto
+      dadosPedido.subtotal = pedido.subtotal
       dadosPedido.total = pedido.total
+      dadosPedido.pagamento = pedido.pagamento
       dadosPedido.status = pedido.status
 
       const savedPedido = await this.repository.save(dadosPedido)
-
-      for (const item of pedido.items) {
-        const dadosItem = itemRepo.create({
-          name: item.name,
-          preco: Number(item.price),
-          quantidade: item.quantity,
-          observacao: item.observation,
-          pedido: savedPedido
-        })
-        await itemRepo.save(dadosItem)
-      }
-
       return savedPedido
+
     } catch (error) {
       throw new Error(`Erro ao salvar pedido: ${error}`)
     }

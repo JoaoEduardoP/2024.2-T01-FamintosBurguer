@@ -8,10 +8,12 @@ import { AppDataSource } from '../config/database'
 const BASE_URL = 'http://localhost:3000' // Atualize conforme necessário
 
 describe('Testando CRUD de Itens de Pedido', () => {
+  let pedidoTeste: Pedido
   let pedidoId: number
+  let AlimentoTeste: Alimento
   let alimentoId: number
   let itemId: number
-
+  
   beforeAll(async () => {
     await AppDataSource.initialize()
 
@@ -39,6 +41,9 @@ describe('Testando CRUD de Itens de Pedido', () => {
     })
     const alimento = await alimentoRepo.save(novoAlimento)
     alimentoId = alimento.id
+
+    AlimentoTeste = alimento
+    pedidoTeste = pedido
   })
 
   afterAll(async () => {
@@ -57,12 +62,15 @@ describe('Testando CRUD de Itens de Pedido', () => {
   })
 
   test('Criar um Novo Item de Pedido', async () => {
+
     const novoItem = {
       quantidade: 2,
       custom: true,
+      name: 'Teste',
+      preco: 20,
       observacao: 'Sem cebola, adicionar queijo extra',
-      pedidoId,
-      alimentoId
+      pedido: pedidoTeste,
+      alimento: AlimentoTeste
     }
 
     // Criação direta no banco de dados com o repositório
@@ -183,8 +191,8 @@ describe('Testando a função getAlimentosMaisPedidos', () => {
       pagamento: 'Cartão',
       status: 'Pendente'
     })
-    const pedido = await pedidoRepo.save(novoPedido)
-    pedidoId = pedido.id
+    const pedido1 = await pedidoRepo.save(novoPedido)
+    pedidoId = pedido1.id
 
     // Cria dois alimentos
     const novoAlimento1 = alimentoRepo.create({
@@ -209,8 +217,10 @@ describe('Testando a função getAlimentosMaisPedidos', () => {
     const novoItem1 = itensPedidoRepo.create({
       quantidade: 2,
       custom: true,
+      name: 'Teste',
       observacao: 'Sem cebola',
-      pedido: pedido,
+      preco: 20,
+      pedido: pedido1,
       alimento: alimento1
     })
     const savedItem1 = await itensPedidoRepo.save(novoItem1)
@@ -219,8 +229,10 @@ describe('Testando a função getAlimentosMaisPedidos', () => {
     const novoItem2 = itensPedidoRepo.create({
       quantidade: 3,
       custom: false,
+      name: 'Teste',
       observacao: 'Com chocolate',
-      pedido: pedido,
+      preco: 20,
+      pedido: pedido1,
       alimento: alimento2
     })
     const savedItem2 = await itensPedidoRepo.save(novoItem2)
@@ -229,8 +241,10 @@ describe('Testando a função getAlimentosMaisPedidos', () => {
     const novoItem3 = itensPedidoRepo.create({
       quantidade: 1,
       custom: true,
+      name: 'Teste',
       observacao: 'Sem cebola',
-      pedido: pedido,
+      preco: 20,
+      pedido: pedido1,
       alimento: alimento1
     })
     const savedItem3 = await itensPedidoRepo.save(novoItem3)
@@ -264,7 +278,7 @@ describe('Testando a função getAlimentosMaisPedidos', () => {
     alimentosMaisPedidos.forEach((item) => {
       expect(item).toEqual(
         expect.objectContaining({
-          alimentoId: expect.any(Number),
+          alimento: expect.any(Number),
           totalPedidos: expect.any(Number) // Aceita tanto string quanto number
         })
       )
@@ -272,7 +286,7 @@ describe('Testando a função getAlimentosMaisPedidos', () => {
 
     // Verifica se o alimento mais pedido está no topo
     const alimentoMaisPedido = alimentosMaisPedidos[0]
-    expect(alimentoMaisPedido.alimentoId).toBe(alimentoId1) // Alimento 1 foi pedido 2 vezes
+    expect(alimentoMaisPedido.alimento).toBe(alimentoId1) // Alimento 1 foi pedido 2 vezes
     expect(alimentoMaisPedido.totalPedidos).toBe(2) // Total de pedidos para o alimento 1
   })
 })
