@@ -20,7 +20,7 @@ app.whenReady().then(async () => {
 
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize()
-      console.log('Banco de dados inicializado!')
+      console.log('--------------------------------------- \n Banco de dados inicializado! \n ---------------------------------------')
     }
 
     // Registrar os IPC handlers para comunicação com o preloader

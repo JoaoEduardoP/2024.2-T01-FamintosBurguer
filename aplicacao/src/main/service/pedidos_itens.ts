@@ -150,9 +150,9 @@ export async function getAlimentosMaisPedidos() {
   try {
     const alimentosMaisPedidos = await itensPedidoRepo
       .createQueryBuilder('itenspedido')
-      .select('itenspedido.alimentoId', 'alimentoId') // Seleciona o ID do alimento
-      .addSelect('COUNT(itenspedido.alimentoId)', 'totalPedidos') // Conta quantas vezes o alimento foi pedido
-      .groupBy('itenspedido.alimentoId') // Agrupa os resultados por alimentoId
+      .select('itenspedido.alimento', 'alimento') // Seleciona o ID do alimento
+      .addSelect('COUNT(itenspedido.alimento)', 'totalPedidos') // Conta quantas vezes o alimento foi pedido
+      .groupBy('itenspedido.alimento') // Agrupa os resultados por alimentoId
       .orderBy('totalPedidos', 'DESC') // Ordena pelos mais pedidos
       .limit(100) // Limita o resultado a 100 itens
       .getRawMany() // Retorna os resultados brutos

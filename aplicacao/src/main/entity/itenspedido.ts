@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
 import { Pedido } from './pedido'
+import { Alimento } from './alimentos'
 
 @Entity('itenspedido')
 export class ItensPedido {
@@ -15,10 +16,15 @@ export class ItensPedido {
   @Column('integer')
   quantidade: number
 
+  @Column('boolean')
+  custom: boolean
+
   @Column('text')
   observacao: string
 
   @ManyToOne(() => Pedido, (pedido) => pedido.itenspedido, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'pedidoId' })
-  pedido: Pedido
+  pedido: Pedido; // Chave estrangeira para a tabela `usuarios`
+
+  @ManyToOne(() => Alimento, (alimento) => alimento.ingredientesalimento, { onDelete: 'CASCADE' })
+  alimento: Alimento; // Chave estrangeira para a tabela `usuarios`
 }
