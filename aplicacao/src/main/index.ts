@@ -3,7 +3,7 @@ import { app, shell, BrowserWindow, nativeTheme } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { AppDataSource } from './config/database'
 import { PedidoController } from './ipc/pedidoshandlers'
-import { registerItensPedidoHandlers } from './ipc/itenspedidoshandlers'
+import { ItensPedidoController } from './ipc/itenspedidoshandlers'
 import { alimentosController } from './ipc/alimentoshandlers'
 import icon from '../../resources/icon.png?asset'
 import path from 'path'
@@ -25,7 +25,7 @@ app.whenReady().then(async () => {
 
     // Registrar os IPC handlers para comunicação com o preloader
     PedidoController()
-    registerItensPedidoHandlers()
+    ItensPedidoController()
     alimentosController()
 
     createWindow()

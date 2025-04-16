@@ -2,7 +2,7 @@ import { ipcMain } from 'electron'
 import { ipcLogger } from '../utils/ipcLogger'
 import * as pedido_itens from '../service/pedidos_itens'
 
-export function registerItensPedidoHandlers() {
+export function ItensPedidoController() {
   ipcMain.handle('get-itens-pedidos', ipcLogger('get-itens-pedidos', pedido_itens.getItensPedidos))
   ipcMain.handle(
     'get-itens-mais-pedidos',
